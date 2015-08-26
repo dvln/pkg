@@ -44,10 +44,9 @@ type Defn struct {
 	WsPath   string                       `json:"ws_path"`
 	Arch     []string                     `json:"arch"`
 	OS       []string                     `json:"os"`
-	DevStage []string                     `json:"dev_stage"`
+	Stage    []string                     `json:"stage"`
 	Attrs    map[string]string            `json:"attrs"`
 	Remotes  map[string]map[string]string `json:"remotes"`
 	Access   map[string]string            `json:"access"`
 	Status   string                       `json:"status"`
 }
-
