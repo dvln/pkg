@@ -26,27 +26,40 @@
 // we have a workspace we could find the package there in the workspace.
 package pkg
 
-// Defn identifies the data needed to "define" a 'dvln' "package"... *not*
+import (
+	"github.com/dvln/vcs"
+)
+
+type Class string
+
+// dvln 'pkg' classes, ie "single pkg", "group pkg", "codebase pkg"
+const (
+	UnknownClass Class = ""
+	Single       Class = "single"
+	Group        Class = "group"
+	Codebase     Class = "codebase"
+)
+
+// Defn identifies the data needed to "define" a dvln "package"... *not*
 // including any specific version information.  This is all about basic
-// package details... where the packages "live", where they will go in the
-// sandbox or working tree (ie: "workspace"), what they might have been called
-// in the past or aliases that they might still need to be referenced by, what
-// VCS/SCM system is storing the package and data about where to find that, ...
+// package details... VCS info for the package, where it will exist in the
+// workspace (ie: sandbox or work tree), what a pkg might have been called
+// in the past or aliases that it might still need to be referenced by, etc
 type Defn struct {
 	ID       int                          `json:"id"`
 	Name     string                       `json:"name"`
-	Aliases  map[string]string            `json:"aliases"`
-	Desc     string                       `json:"desc"`
-	Codebase string                       `json:"codebase"`
-	Contacts []string                     `json:"contacts"`
-	VCS      string                       `json:"vcs"`
-	Repo     map[string]string            `json:"repo"`
-	WsPath   string                       `json:"ws_path"`
-	Arch     []string                     `json:"arch"`
-	OS       []string                     `json:"os"`
-	Stage    []string                     `json:"stage"`
-	Attrs    map[string]string            `json:"attrs"`
-	Remotes  map[string]map[string]string `json:"remotes"`
-	Access   map[string]string            `json:"access"`
-	Status   string                       `json:"status"`
+	Aliases  map[string]string            `json:"aliases,omitempty"`
+	Desc     string                       `json:"desc,omitempty"`
+	Ws       string                       `json:"ws,omitempty"`
+	Contacts []string                     `json:"contacts,omitempty"`
+	Class    Class                        `json:"class,omitempty"`
+	VCS      vcs.Type                     `json:"vcs,omitempty"`
+	Repo     map[string]string            `json:"repo,omitempty"`
+	Arch     []string                     `json:"arch,omitempty"`
+	OS       []string                     `json:"os,omitempty"`
+	Stage    []string                     `json:"stage,omitempty"`
+	Attrs    map[string]string            `json:"attrs,omitempty"`
+	Remotes  map[string]map[string]string `json:"remotes,omitempty"`
+	Access   map[string]string            `json:"access,omitempty"`
+	Status   string                       `json:"status,omitempty"`
 }
