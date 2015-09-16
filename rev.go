@@ -67,6 +67,10 @@
 
 package pkg
 
+import (
+	"github.com/dvln/vcs"
+)
+
 // RevType is an indicator if a revision is static or dynamic (or unknown)
 type RevType string
 
@@ -86,13 +90,15 @@ type Revision interface {
 	Pull(pkgRevSel string) error
 }
 
-// Rev indicates the basic data needed for a given package revision.  The
+// Rev indicates the basic data needed for a given VCS pkg revision.  The
 // name is useful for messaging and such whereas the ID is used for trivial
 // lookup of the package meta-data in the codebase/pkg definition.
 type Rev struct {
-	ID      int    `json:"id"`
-	Name    string `json:"name"`
-	Rev     string `json:"rev"`
-	RevType string `json:"rev_type"`
+	ID      int            `json:"id"`
+	Name    string         `json:"name"`
+	Rev     string         `json:"rev"`
+	RevType string         `json:"rev_type"`
+	Deps    map[int]string `json:"deps"`
+	VCS     vcs.Reader
 }
 

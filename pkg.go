@@ -27,9 +27,12 @@
 package pkg
 
 import (
+	"net/url"
+
 	"github.com/dvln/vcs"
 )
 
+// Class defines the "class" of 'dvln' pkg: unknown, single, group or codebase
 type Class string
 
 // dvln 'pkg' classes, ie "single pkg", "group pkg", "codebase pkg"
@@ -46,20 +49,37 @@ const (
 // workspace (ie: sandbox or work tree), what a pkg might have been called
 // in the past or aliases that it might still need to be referenced by, etc
 type Defn struct {
-	ID       int                          `json:"id"`
-	Name     string                       `json:"name"`
-	Aliases  map[string]string            `json:"aliases,omitempty"`
-	Desc     string                       `json:"desc,omitempty"`
-	Ws       string                       `json:"ws,omitempty"`
-	Contacts []string                     `json:"contacts,omitempty"`
-	Class    Class                        `json:"class,omitempty"`
-	VCS      vcs.Type                     `json:"vcs,omitempty"`
-	Repo     map[string]string            `json:"repo,omitempty"`
-	Arch     []string                     `json:"arch,omitempty"`
-	OS       []string                     `json:"os,omitempty"`
-	Stage    []string                     `json:"stage,omitempty"`
-	Attrs    map[string]string            `json:"attrs,omitempty"`
-	Remotes  map[string]map[string]string `json:"remotes,omitempty"`
-	Access   map[string]string            `json:"access,omitempty"`
-	Status   string                       `json:"status,omitempty"`
+	ID       int                 `json:"id"`
+	Name     string              `json:"name"`
+	Aliases  map[string]string   `json:"aliases,omitempty"`
+	Desc     string              `json:"desc,omitempty"`
+	Contacts map[string][]string `json:"contacts,omitempty"`
+	Ws       string              `json:"ws,omitempty"`
+	Class    Class               `json:"class,omitempty"`
+	Deps     string              `json:"deps,omitempty"`
+	VCS      []VCSFmt            `json:"vcs,omitempty"`
+	Arch     []string            `json:"arch,omitempty"`
+	OS       []string            `json:"os,omitempty"`
+	Stage    []string            `json:"stage,omitempty"`
+	Attrs    map[string]string   `json:"attrs,omitempty"`
+	License  string              `json:"license,omitempty"`
+	Issues   url.URL             `json:"issues,omitempty"`
+	Access   map[string]string   `json:"access,omitempty"`
+	Status   string              `json:"status,omitempty"`
+}
+
+// VCSFmt contains information about a given format like the 'git' format
+// for a component (aliases might be ["src,source"] so that if a user asks for
+// the generic "src" format it'll grab the git format, whereas if they ask
+// for the "bin" format maybe that's an alias for the "rpm" format of the pkg).
+// The Repo contains VCS repo pointers for read, write, review, etc URL's or
+// central pointers.  The remotes allows one to set up additional remotes
+// besides the place one pulled the code from (eg: from the canonical central
+// vendor repo instead of my local fork, I might want a remote for that
+// auto-added in my wkspc clone so I can merge from it easily)
+type VCSFmt struct {
+	Type    vcs.Type                     `json:"type,omitempty"`
+	Fmts    []string                     `json:"fmts,omitempty"`
+	Repo    map[string]string            `json:"repo,omitempty"`
+	Remotes map[string]map[string]string `json:"remotes,omitempty"`
 }
